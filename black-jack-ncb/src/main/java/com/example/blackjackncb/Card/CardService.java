@@ -15,7 +15,6 @@ public class CardService {
     boolean isAceElevenForDealer = false;
     int aceValue =0;
 
-
     String[] ranks = {"Ace","2","3","4","5","6","7","8","9",
             "Jack", "Queen", "King"};
     Random r=new Random();
@@ -100,14 +99,17 @@ public class CardService {
         if(response.equalsIgnoreCase("Y")){
             //get a card vlaue and update
             int newCardVale = getCardValue(player);
+            player.setCurrentCardValue(newCardVale);
             player.setCurrentCardCount(player.getCurrentCardCount() + newCardVale);
             // if player win or burst
             checkIfPlayerWinOrBurst(player);
+            displayPlayerInfo(player);
             return player;
         }else{
             return player;
             //deal card to dealer
         }
+
     }
 
     public Player dealCardToDealer(Player dealer){
@@ -115,6 +117,7 @@ public class CardService {
             int newCardVale = getCardValue(dealer);
             dealer.setCurrentCardCount(dealer.getCurrentCardCount() + newCardVale);
             checkIfPlayerWinOrBurst(dealer);
+            displayPlayerInfo(dealer);
             return dealer;
         }else {
             String dealerRresponse = CardDealPrompt(dealer);
@@ -122,19 +125,16 @@ public class CardService {
                 int newCardVale = getCardValue(dealer);
                 dealer.setCurrentCardCount(dealer.getCurrentCardCount() + newCardVale);
                 checkIfPlayerWinOrBurst(dealer);
+                displayPlayerInfo(dealer);
                 return dealer;
             }
             else
+
                 return dealer;
         }
 
     }
 
-    public void elevenDealerLogic(Player player){
-        if(player.getName().equalsIgnoreCase("dealer") && isAceElevenForDealer ){
-
-        }
-    }
 
     public String CardDealPrompt(Player player){
         System.out.println("Do you want a next card "+player.getName() + "?");
@@ -147,12 +147,18 @@ public class CardService {
     public void checkIfPlayerWinOrBurst(Player person){
         if(person.getCurrentCardCount()==21){
             System.out.println("Game End");
-            System.out.println("Person:"+ person.getName() +"Won with card count of:"+ person.getCurrentCardCount() );
+            System.out.println("Person:"+ person.getName() +" Won with card count of:"+ person.getCurrentCardCount() );
+            Scanner scanner = new Scanner(System.in);
+            String response = scanner.nextLine();
+            //end game
         }
 
         if(person.getCurrentCardCount()>21){
             System.out.println("Game End");
-            System.out.println("Game End. Player:"+ person.getName() +"lost to burst, with card count of:"+ person.getCurrentCardCount() );
+            System.out.println("Game End. Player:"+ person.getName() +" lost to burst, with card count of:"+ person.getCurrentCardCount() );
+            Scanner scanner = new Scanner(System.in);
+            String response = scanner.nextLine();
+            //end game
         }
     }
 
@@ -166,11 +172,13 @@ public class CardService {
     public void SetAceIsEleven(String response){
         if(response.equalsIgnoreCase("Y")){
             isAceElevenForDealer = true;
-            aceValue = 11;
         }else {
             isAceElevenForDealer = false;
-            aceValue = 1;
         }
+    }
+
+    public void displayPlayerInfo(Player player){
+        System.out.println(player.getName()+ " was dealt Card: "+ player.getCurrentCardValue() + " current card Count:"+ player.getCurrentCardCount());
     }
 
 

@@ -37,7 +37,6 @@ public class BlackJackNcbApplication {
 		cardService.SetAceIsEleven(response);
 
 		while ((dealer.getCurrentCardCount() <= 21) ) {
-
 			cardService.dealCardToPlayer(player);
 			cardService.dealCardToDealer(dealer);
 		}
